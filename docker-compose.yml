@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+  postgre-app:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=care_user
+      - POSTGRES_DB=driCareDB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  app:
+    build: .
+    ports:
+      - "9110:9110"
+    depends_on:
+      - postgre-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgre-app:5432/driCareDB
+      SPRING_DATASOURCE_USERNAME: care_user
+      SPRING_DATASOURCE_PASSWORD: password

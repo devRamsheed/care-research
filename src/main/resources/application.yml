@@ -1,0 +1,9 @@
+server:
+  port: 9110
+
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/driCareDB
+    username: care_user
+    password: password
