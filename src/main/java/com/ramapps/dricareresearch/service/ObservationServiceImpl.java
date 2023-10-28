@@ -4,14 +4,17 @@ import com.ramapps.dricareresearch.constants.ObservationTypes;
 import com.ramapps.dricareresearch.constants.Units;
 import com.ramapps.dricareresearch.dto.ObservationDto;
 import com.ramapps.dricareresearch.dto.ObservationResponse;
+import com.ramapps.dricareresearch.exception.ResourceNotFoundException;
 import com.ramapps.dricareresearch.model.Observations;
 import com.ramapps.dricareresearch.repository.ObservationRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,24 @@ public class ObservationServiceImpl implements ObservationService {
         observationRepo.save(mapToObservations.apply(observationDto));
     }
 
+    @Override
+    public ObservationResponse getObservation(Long id) {
+        return observationRepo.findById(id).map(mapToObservationDto).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Transactional
+    @Override
+    public void updateObservation(ObservationDto observationDto) {
+        Optional<Observations> observation = observationRepo.findById(observationDto.getId());
+        observation.orElseThrow(ResourceNotFoundException::new);
+        updateObservation(observation.get(), observationDto);
+    }
+
+    @Override
+    public void deleteObservation(Long id) {
+        observationRepo.deleteById(id);
+    }
+
     private final Function<Observations, ObservationResponse> mapToObservationDto = observations -> {
         ObservationResponse observation = new ObservationResponse();
         observation.setId(observations.getId());
@@ -54,4 +75,11 @@ public class ObservationServiceImpl implements ObservationService {
         observation.setPatient(observations.getPatient());
         return observation;
     };
+
+    private void updateObservation(Observations observation, ObservationDto observationDto) {
+        observation.setType(observationDto.getType().name());
+        observation.setValue(observationDto.getValue());
+        observation.setUnit(observationDto.getUnit().name());
+        observation.setPatient(observationDto.getPatient());
+    }
 }

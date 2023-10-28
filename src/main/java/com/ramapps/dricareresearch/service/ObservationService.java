@@ -22,4 +22,26 @@ public interface ObservationService {
      * @param observationDto observation dto
      */
     void createObservation(ObservationDto observationDto);
+
+    /**
+     * get an observation data by id
+     *
+     * @param id observation unique id
+     * @return observation response
+     */
+    ObservationResponse getObservation(Long id);
+
+    /**
+     * update an existing observation
+     *
+     * @param observationDto observation updated record
+     */
+    void updateObservation(ObservationDto observationDto);
+
+    /**
+     * Delete an observation
+     *
+     * @param id observation identifier
+     */
+    void deleteObservation(Long id);
 }

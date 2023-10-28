@@ -34,4 +34,28 @@ public class ObservationController {
                 .build(), HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<GenericResponse<ObservationResponse>> getObservationById(@PathVariable Long id) {
+        return new ResponseEntity<>(GenericResponse.<ObservationResponse>builder()
+                .body(observationService.getObservation(id))
+                .status(HttpStatus.OK.value())
+                .build(), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<GenericResponse<Void>> updateObservation(@RequestBody ObservationDto observation) {
+        observationService.updateObservation(observation);
+        return new ResponseEntity<>(GenericResponse.<Void>builder()
+                .status(HttpStatus.OK.value())
+                .build(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GenericResponse<Void>> deleteObservation(@PathVariable Long id) {
+        observationService.deleteObservation(id);
+        return new ResponseEntity<>(GenericResponse.<Void>builder()
+                .status(HttpStatus.OK.value())
+                .build(), HttpStatus.OK);
+    }
+
 }
