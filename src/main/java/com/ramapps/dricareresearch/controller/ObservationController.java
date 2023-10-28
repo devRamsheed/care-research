@@ -4,6 +4,8 @@ import com.ramapps.dricareresearch.dto.GenericResponse;
 import com.ramapps.dricareresearch.dto.ObservationDto;
 import com.ramapps.dricareresearch.dto.ObservationResponse;
 import com.ramapps.dricareresearch.service.ObservationService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/observations")
 @RequiredArgsConstructor
+@Api(value = "Observations", tags = "Observation APIs")
 public class ObservationController {
     private final ObservationService observationService;
 
